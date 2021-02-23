@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous">
+    <link rel="shortcut icon" type="image/png" href="vuejs.png" />
+    <title> Lista de comentários </title>
+</head>
+
+<body>
+    <div id="app"></div>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+    <script>
+        new Vue({
+            el: '#app',
+            template: `
+            <div class="container">
+        <h1>Comentários</h1>
+        <hr />
+        <div class="form-todo form-group">
+            <p>
+                <input placeholder="Nome" type="text" name="author" class="form-control" v-model="name" />
+            </p>
+            <p>
+                <textarea placeholder="Comentário" name="message" class="form-control" v-model="message"></textarea>
+            </p>
+            <button v-on:click="addComent" type="submit" class="btn btn-primary">Comentar</button>
+        </div>
+        <div class="list-group" style="margin-top: 15px">
+            <div class="list-group-item" v-for="(comment, index) in allComments">
+                <span class="comment_author"> Autor: <strong>{{ comment.name }}</strong></span>
+                <p>Mensagem: {{ comment.message }}</p>
+                <a v-on:click="removeComment(index)" href="#" title="Excluir">Excluir</a>
+                </div>
+        </div>
+    </div>
+    `,
+            data() {
+                return {
+                    comments: [
+                    ],
+                    name: '',
+                    message: ''
+                }
+            },
+            methods: {
+                addComent() {
+                    if (this.message === "") {
+                        this.name = "";
+                        this.message = "";
+                        return;
+                    }
+                    this.comments.push({
+                        name: this.name,
+                        message: this.message
+                    });
+
+                    this.name = "";
+                    this.message = "";
+
+                },
+                removeComment(index) {
+                    this.comments.splice(index, 1)
+                }
+            },
+            computed: {
+                allComments() {
+                    return this.comments.map(comment => ({
+                        ...comment,
+                        name: comment.name === '' ? 'Anônimo' : comment.name
+                    }))
+                }
+            },
+            watch: {
+                comments(val) {
+                    console.log('val', val)
+                }
+            }
+        })
+    </script>
+</body>
+
+</html>
